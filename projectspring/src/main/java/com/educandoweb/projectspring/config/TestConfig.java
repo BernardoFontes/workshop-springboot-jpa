@@ -1,14 +1,8 @@
 package com.educandoweb.projectspring.config;
 
-import com.educandoweb.projectspring.entities.Category;
-import com.educandoweb.projectspring.entities.Order;
-import com.educandoweb.projectspring.entities.Product;
-import com.educandoweb.projectspring.entities.User;
+import com.educandoweb.projectspring.entities.*;
 import com.educandoweb.projectspring.entities.enums.OrderStatus;
-import com.educandoweb.projectspring.repositories.CategoryRepository;
-import com.educandoweb.projectspring.repositories.OrderRepository;
-import com.educandoweb.projectspring.repositories.ProductRepository;
-import com.educandoweb.projectspring.repositories.UserRepository;
+import com.educandoweb.projectspring.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +26,9 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
     @Override
     public void run(String... args) throws Exception {
         User u1 = new User(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
@@ -42,7 +39,6 @@ public class TestConfig implements CommandLineRunner {
         Order o2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), u2, OrderStatus.WAITING_PAYMENT);
         Order o3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), u1, OrderStatus.WAITING_PAYMENT);
         orderRepository.saveAll(Arrays.asList(o1,o2,o3));
-
         Category c1 = new Category(null, "Electronics");
         Category c2 = new Category(null, "Books");
         Category c3 = new Category(null, "Computers");
@@ -54,6 +50,12 @@ public class TestConfig implements CommandLineRunner {
         Product p4 = new Product(null, "PC Gamer", "Donec aliquet odio ac rhoncus cursus.", 1200.0, "");
         Product p5 = new Product(null, "Rails for Dummies", "Cras fringilla convallis sem vel faucibus.", 100.99, "");
         productRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
+
+        OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPrice());
+        OrderItem oi2 = new OrderItem(o1, p3, 1, p3.getPrice());
+        OrderItem oi3 = new OrderItem(o2, p3, 2, p3.getPrice());
+        OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
+        orderItemRepository.saveAll(Arrays.asList(oi1,oi2,oi3,oi4));
 
         p1.getCategories().add(c2);
         p2.getCategories().add(c1);
